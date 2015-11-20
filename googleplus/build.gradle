@@ -1,6 +1,10 @@
 apply plugin: 'com.android.library'
 apply from: '../maven_push.gradle'
 
+apply plugin: 'com.github.dcendents.android-maven'
+
+group='com.github.tatyanaho'
+
 android {
     compileSdkVersion 21
     buildToolsVersion "21.1.1"
