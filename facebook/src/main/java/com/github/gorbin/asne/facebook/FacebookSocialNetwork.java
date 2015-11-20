@@ -21,6 +21,7 @@
  *******************************************************************************/
 package com.github.gorbin.asne.facebook;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -84,6 +85,9 @@ public class FacebookSocialNetwork extends SocialNetwork {
     private Bundle mBundle;
     private ArrayList<String> permissions;
     private PendingAction mPendingAction = PendingAction.NONE;
+
+    private Context context;
+
     private Session.StatusCallback mSessionStatusCallback = new Session.StatusCallback() {
         @Override
         public void call(Session session, SessionState state, Exception exception) {
@@ -94,6 +98,18 @@ public class FacebookSocialNetwork extends SocialNetwork {
     public FacebookSocialNetwork(Fragment fragment, ArrayList<String> permissions) {
         super(fragment);
         String applicationID = Utility.getMetadataApplicationId(fragment.getActivity());
+
+        if (applicationID == null) {
+            throw new IllegalStateException("applicationID can't be null\n" +
+                    "Please check https://developers.facebook.com/docs/android/getting-started/");
+        }
+        this.permissions = permissions;
+    }
+
+    public FacebookSocialNetwork(Fragment fragment, Context ctx, ArrayList<String> permissions) {
+        super(fragment, ctx);
+        this.context = ctx;
+        String applicationID = Utility.getMetadataApplicationId(ctx);
 
         if (applicationID == null) {
             throw new IllegalStateException("applicationID can't be null\n" +
@@ -131,15 +147,15 @@ public class FacebookSocialNetwork extends SocialNetwork {
         Session currentSession = mSessionTracker.getSession();
         if (currentSession == null || currentSession.getState().isClosed()) {
             mSessionTracker.setSession(null);
-            Session session = new Session.Builder(mSocialNetworkManager.getActivity())
-                    .setApplicationId(mApplicationId).build();
+            Session session = new Session.Builder(getCurrentActivity())
+                        .setApplicationId(mApplicationId).build();
             Session.setActiveSession(session);
             currentSession = session;
         }
 
         if (!currentSession.isOpened()) {
             Session.OpenRequest openRequest;
-            openRequest = new Session.OpenRequest(mSocialNetworkManager.getActivity());
+            openRequest = new Session.OpenRequest(getCurrentActivity());
 
             openRequest.setDefaultAudience(SessionDefaultAudience.EVERYONE);
             if(permissions != null) {
@@ -376,9 +392,11 @@ public class FacebookSocialNetwork extends SocialNetwork {
     @Override
     public void requestPostDialog(Bundle bundle, OnPostingCompleteListener onPostingCompleteListener) {
         super.requestPostDialog(bundle, onPostingCompleteListener);
-        if (FacebookDialog.canPresentShareDialog(mSocialNetworkManager.getActivity(),
+
+
+        if (FacebookDialog.canPresentShareDialog(getCurrentActivity(),
                 FacebookDialog.ShareDialogFeature.SHARE_DIALOG)) {
-            FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(mSocialNetworkManager.getActivity())
+            FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(getCurrentActivity())
                     .setLink(bundle.getString(BUNDLE_LINK))
                     .setDescription(bundle.getString(BUNDLE_MESSAGE))
                     .setName(bundle.getString(BUNDLE_NAME))
@@ -393,6 +411,14 @@ public class FacebookSocialNetwork extends SocialNetwork {
         }
     }
 
+    private Activity getCurrentActivity() {
+        Activity activity = (Activity) context;
+        if (activity == null) {
+            activity = mSocialNetworkManager.getActivity();
+        }
+        return activity;
+    }
+
     private void publishFeedDialog(Bundle bundle) {
         Bundle params = new Bundle();
         params.putString("name", bundle.getString(BUNDLE_NAME));
@@ -402,7 +428,7 @@ public class FacebookSocialNetwork extends SocialNetwork {
         params.putString("picture", bundle.getString(BUNDLE_PICTURE));
 
         WebDialog feedDialog = (
-                new WebDialog.FeedDialogBuilder(mSocialNetworkManager.getActivity(),
+                new WebDialog.FeedDialogBuilder(getCurrentActivity(),
                         Session.getActiveSession(),
                         params))
                 .setOnCompleteListener(new WebDialog.OnCompleteListener() {
@@ -438,7 +464,7 @@ public class FacebookSocialNetwork extends SocialNetwork {
                 return;
             } else if (session.isOpened()) {
                 // We need to get new permissions, then complete the action when we get called back.
-                session.requestNewPublishPermissions(new Session.NewPermissionsRequest(mSocialNetworkManager.getActivity(), PERMISSION));
+                session.requestNewPublishPermissions(new Session.NewPermissionsRequest(getCurrentActivity(), PERMISSION));
                 return;
             }
         }
@@ -591,10 +617,10 @@ public class FacebookSocialNetwork extends SocialNetwork {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUILifecycleHelper = new UiLifecycleHelper(mSocialNetworkManager.getActivity(), mSessionStatusCallback);
+        mUILifecycleHelper = new UiLifecycleHelper(getCurrentActivity(), mSessionStatusCallback);
         mUILifecycleHelper.onCreate(savedInstanceState);
 
-        initializeActiveSessionWithCachedToken(mSocialNetworkManager.getActivity());
+        initializeActiveSessionWithCachedToken(getCurrentActivity());
         finishInit();
     }
 
@@ -615,7 +641,7 @@ public class FacebookSocialNetwork extends SocialNetwork {
 
     private void finishInit() {
         mSessionTracker = new SessionTracker(
-                mSocialNetworkManager.getActivity(), mSessionStatusCallback, null, false);
+                getCurrentActivity(), mSessionStatusCallback, null, false);
     }
 
     /**
@@ -669,7 +695,7 @@ public class FacebookSocialNetwork extends SocialNetwork {
         Session session = Session.getActiveSession();
         int sanitizedRequestCode = requestCode % 0x10000;
         if (session != null) {
-            session.onActivityResult(mSocialNetworkManager.getActivity(), sanitizedRequestCode, resultCode, data);
+            session.onActivityResult(getCurrentActivity(), sanitizedRequestCode, resultCode, data);
         }
 
         mUILifecycleHelper.onActivityResult(requestCode, resultCode, data, new FacebookDialog.Callback() {

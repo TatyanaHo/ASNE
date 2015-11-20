@@ -127,6 +127,11 @@ public abstract class SocialNetwork {
         mSharedPreferences = mSocialNetworkManager.getActivity().getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
     }
 
+    protected SocialNetwork(Fragment fragment, Context context) {
+        mSocialNetworkManager = fragment;
+        mSharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+    }
+
     //////////////////// LIFECYCLE ////////////////////
 
     /**
