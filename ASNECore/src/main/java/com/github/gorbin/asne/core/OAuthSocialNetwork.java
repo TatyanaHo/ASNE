@@ -21,8 +21,8 @@
  *******************************************************************************/
 package com.github.gorbin.asne.core;
 
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 
 import com.github.gorbin.asne.core.listener.base.SocialNetworkListener;
 

@@ -23,11 +23,11 @@ package com.github.gorbin.asne.vk;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
 import com.github.gorbin.asne.core.AccessToken;

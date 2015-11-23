@@ -21,12 +21,12 @@
  *******************************************************************************/
 package com.github.gorbin.asne.instagram;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
 import com.github.gorbin.asne.core.AccessToken;
