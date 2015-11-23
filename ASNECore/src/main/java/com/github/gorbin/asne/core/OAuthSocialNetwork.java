@@ -22,6 +22,7 @@
 package com.github.gorbin.asne.core;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 
 import com.github.gorbin.asne.core.listener.base.SocialNetworkListener;
@@ -43,6 +44,10 @@ public abstract class OAuthSocialNetwork extends SocialNetwork {
 
     protected OAuthSocialNetwork(Fragment fragment) {
         super(fragment);
+    }
+
+    protected OAuthSocialNetwork(Fragment fragment, Context context) {
+        super(fragment, context);
     }
 
     protected void executeRequest(SocialNetworkAsyncTask request, Bundle params, String requestID) {

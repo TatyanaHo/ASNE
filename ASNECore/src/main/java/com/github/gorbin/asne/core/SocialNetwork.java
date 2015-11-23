@@ -21,6 +21,7 @@
  *******************************************************************************/
 package com.github.gorbin.asne.core;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -117,6 +118,7 @@ public abstract class SocialNetwork {
     protected Map<String, SocialNetworkListener> mGlobalListeners = new HashMap<String, SocialNetworkListener>();
     protected Map<String, SocialNetworkListener> mLocalListeners = new HashMap<String, SocialNetworkListener>();
 
+    protected Context context;
     /**
      * @param fragment ant not activity or context, as we will need to call startActivityForResult,
      *                 we will want to receice on onActivityResult in out SocialNetworkManager
@@ -129,7 +131,16 @@ public abstract class SocialNetwork {
 
     protected SocialNetwork(Fragment fragment, Context context) {
         mSocialNetworkManager = fragment;
+        this.context = context;
         mSharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+    }
+
+    protected Activity getCurrentActivity() {
+        Activity activity = (Activity) context;
+        if (activity == null) {
+            activity = mSocialNetworkManager.getActivity();
+        }
+        return activity;
     }
 
     //////////////////// LIFECYCLE ////////////////////

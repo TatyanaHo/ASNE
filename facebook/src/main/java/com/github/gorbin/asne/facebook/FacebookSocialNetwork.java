@@ -86,8 +86,6 @@ public class FacebookSocialNetwork extends SocialNetwork {
     private ArrayList<String> permissions;
     private PendingAction mPendingAction = PendingAction.NONE;
 
-    private Context context;
-
     private Session.StatusCallback mSessionStatusCallback = new Session.StatusCallback() {
         @Override
         public void call(Session session, SessionState state, Exception exception) {
@@ -108,7 +106,7 @@ public class FacebookSocialNetwork extends SocialNetwork {
 
     public FacebookSocialNetwork(Fragment fragment, Context ctx, ArrayList<String> permissions) {
         super(fragment, ctx);
-        this.context = ctx;
+
         String applicationID = Utility.getMetadataApplicationId(ctx);
 
         if (applicationID == null) {
@@ -409,14 +407,6 @@ public class FacebookSocialNetwork extends SocialNetwork {
         } else {
             publishFeedDialog(bundle);
         }
-    }
-
-    private Activity getCurrentActivity() {
-        Activity activity = (Activity) context;
-        if (activity == null) {
-            activity = mSocialNetworkManager.getActivity();
-        }
-        return activity;
     }
 
     private void publishFeedDialog(Bundle bundle) {
