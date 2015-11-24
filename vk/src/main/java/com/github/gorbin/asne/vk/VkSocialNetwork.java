@@ -271,12 +271,12 @@ public class VkSocialNetwork extends SocialNetwork {
         final boolean current;
         if(userID == null){
             request = VKApi.users().get(VKParameters.from(VKApiConst.FIELDS,
-                    "id,first_name,last_name,photo_max_orig"
+                    "id,first_name,last_name,email,photo_max_orig"
             ));
             current = true;
         } else {
             request = VKApi.users().get(VKParameters.from(VKApiConst.USER_IDS, userID, VKApiConst.FIELDS,
-                    "id,first_name,last_name,photo_max_orig"
+                    "id,first_name,last_name,email,photo_max_orig"
             ));
             current = false;
         }
