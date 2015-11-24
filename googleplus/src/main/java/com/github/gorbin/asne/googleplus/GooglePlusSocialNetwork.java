@@ -23,6 +23,7 @@ package com.github.gorbin.asne.googleplus;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -88,6 +89,10 @@ public class GooglePlusSocialNetwork extends SocialNetwork implements GooglePlay
 
     public GooglePlusSocialNetwork(Fragment fragment) {
         super(fragment);
+    }
+
+    public GooglePlusSocialNetwork(Fragment fragment, Context context) {
+        super(fragment, context);
     }
 
     /**
@@ -538,7 +543,7 @@ public class GooglePlusSocialNetwork extends SocialNetwork implements GooglePlay
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mActivity = mSocialNetworkManager.getActivity();
+        mActivity = getCurrentActivity();
         Plus.PlusOptions plusOptions = new Plus.PlusOptions.Builder()
                 .addActivityTypes(MomentUtil.ACTIONS)
                 .build();

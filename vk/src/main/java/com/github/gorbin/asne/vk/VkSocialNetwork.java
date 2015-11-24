@@ -24,6 +24,7 @@ package com.github.gorbin.asne.vk;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -140,6 +141,12 @@ public class VkSocialNetwork extends SocialNetwork {
 
     public VkSocialNetwork(Fragment fragment, String key, String[] permissions) {
         super(fragment);
+        this.key = key;
+        this.permissions = permissions;
+    }
+
+    public VkSocialNetwork(Fragment fragment, Context context, String key, String[] permissions) {
+        super(fragment, context);
         this.key = key;
         this.permissions = permissions;
     }
@@ -768,7 +775,7 @@ public class VkSocialNetwork extends SocialNetwork {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = mSocialNetworkManager.getActivity();
+        activity = getCurrentActivity();
         VKUIHelper.onCreate(activity);
         VKSdk.initialize(vkSdkListener, key);
         VKSdk.wakeUpSession();
