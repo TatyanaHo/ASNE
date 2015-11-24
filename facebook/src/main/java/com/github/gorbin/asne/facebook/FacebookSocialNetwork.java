@@ -244,6 +244,9 @@ public class FacebookSocialNetwork extends SocialNetwork {
                 }
             }
         });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,email");
+        request.setParameters(parameters);
         request.executeAsync();
     }
 
