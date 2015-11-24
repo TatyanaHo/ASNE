@@ -46,7 +46,6 @@ import com.github.gorbin.asne.core.listener.OnRequestSocialPersonsCompleteListen
 import com.github.gorbin.asne.core.persons.SocialPerson;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -68,7 +67,7 @@ import java.util.UUID;
  * @author Anton Krasov
  * @author Evgeny Gorbin (gorbin.e.o@gmail.com)
  */
-public class GooglePlusSocialNetwork extends SocialNetwork implements GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class GooglePlusSocialNetwork extends SocialNetwork implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     /*** Social network ID in asne modules, should be unique*/
     public static final int ID = 3;
@@ -627,14 +626,6 @@ public class GooglePlusSocialNetwork extends SocialNetwork implements GooglePlay
             mLocalListeners.get(REQUEST_LOGIN).onError(getID(), REQUEST_LOGIN,
                     "get person == null", null);
         }
-        mConnectRequested = false;
-    }
-
-    /**
-     * Called when the client is disconnected.
-     */
-    @Override
-    public void onDisconnected() {
         mConnectRequested = false;
     }
 
