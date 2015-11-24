@@ -246,7 +246,7 @@ public class VkSocialNetwork extends SocialNetwork {
         ((OnRequestAccessTokenCompleteListener) mLocalListeners.get(REQUEST_ACCESS_TOKEN))
                 .onRequestAccessTokenComplete(getID(),
                         new AccessToken(mSharedPreferences.getString(SAVE_STATE_KEY_OAUTH_TOKEN, null),
-                        mSharedPreferences.getString(SAVE_STATE_KEY_OAUTH_SECRET, null)));
+                                mSharedPreferences.getString(SAVE_STATE_KEY_OAUTH_SECRET, null)));
     }
 
     /**
@@ -443,6 +443,9 @@ public class VkSocialNetwork extends SocialNetwork {
         }
         if(jsonResponse.has("last_name")) {
             lastName = jsonResponse.getString("last_name");
+        }
+        if(jsonResponse.has("email")) {
+            socialPerson.email = jsonResponse.getString("email");
         }
         socialPerson.name = firstName + " " + lastName;
         if (jsonResponse.has("photo_max_orig")) {
