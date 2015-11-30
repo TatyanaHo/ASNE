@@ -444,7 +444,7 @@ public class GooglePlusSocialNetwork extends SocialNetwork implements GoogleApiC
         PlusShare.Builder plusShare =  new PlusShare.Builder(mActivity);
         if (bundle != null && bundle.containsKey(BUNDLE_PICTURE)) {
             plusShare.setContentUrl(Uri.parse(bundle.getString(BUNDLE_PICTURE)));
-            plusShare.setType("image/*");
+            plusShare.setType("image/png");
         } else {
             plusShare.setType("text/plain");
         }
