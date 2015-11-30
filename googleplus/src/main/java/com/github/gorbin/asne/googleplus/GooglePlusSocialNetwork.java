@@ -29,6 +29,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 
 import com.github.gorbin.asne.core.AccessToken;
 import com.github.gorbin.asne.core.SocialNetwork;
@@ -440,8 +441,13 @@ public class GooglePlusSocialNetwork extends SocialNetwork implements GoogleApiC
     @Override
     public void requestPostDialog(Bundle bundle, OnPostingCompleteListener onPostingCompleteListener) {
         super.requestPostDialog(bundle, onPostingCompleteListener);
-        PlusShare.Builder plusShare =  new PlusShare.Builder(mActivity)
-                .setType("text/plain");
+        PlusShare.Builder plusShare =  new PlusShare.Builder(mActivity);
+        if (bundle != null && bundle.containsKey(BUNDLE_PICTURE)) {
+            plusShare.setContentUrl(Uri.parse(bundle.getString(BUNDLE_PICTURE)));
+            plusShare.setType("image/*");
+        } else {
+            plusShare.setType("text/plain");
+        }
         if(bundle != null){
             if(bundle.containsKey(BUNDLE_MESSAGE)){
                 plusShare.setText(bundle.getString(BUNDLE_MESSAGE));
