@@ -441,14 +441,12 @@ public class GooglePlusSocialNetwork extends SocialNetwork implements GoogleApiC
     @Override
     public void requestPostDialog(Bundle bundle, OnPostingCompleteListener onPostingCompleteListener) {
         super.requestPostDialog(bundle, onPostingCompleteListener);
-        PlusShare.Builder plusShare =  new PlusShare.Builder(mActivity);
-        if (bundle != null && bundle.containsKey(BUNDLE_PICTURE)) {
-            plusShare.setContentUrl(Uri.parse(bundle.getString(BUNDLE_PICTURE)));
-            plusShare.setType("image/png");
-        } else {
-            plusShare.setType("text/plain");
-        }
+        PlusShare.Builder plusShare =  new PlusShare.Builder(mActivity).setType("text/plain");
+
         if(bundle != null){
+            if (bundle.containsKey(BUNDLE_PICTURE)) {
+                plusShare.setContentUrl(Uri.parse(bundle.getString(BUNDLE_PICTURE)));
+            }
             if(bundle.containsKey(BUNDLE_MESSAGE)){
                 plusShare.setText(bundle.getString(BUNDLE_MESSAGE));
             }
