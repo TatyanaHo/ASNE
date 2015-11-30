@@ -544,7 +544,7 @@ public class VkSocialNetwork extends SocialNetwork {
     public void requestPostPhoto(File photo, final String message, OnPostingCompleteListener onPostingCompleteListener) {
         super.requestPostPhoto(photo, message, onPostingCompleteListener);
         final Bitmap vkPhoto = getPhoto(photo);
-        VKRequest request = VKApi.uploadWallPhotoRequest(new VKUploadImage(vkPhoto, VKImageParameters.pngImage()), 0, Integer.parseInt(userId));
+        VKRequest request = VKApi.uploadWallPhotoRequest(new VKUploadImage(vkPhoto, VKImageParameters.pngImage()), Long.parseLong(userId), 0);
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
