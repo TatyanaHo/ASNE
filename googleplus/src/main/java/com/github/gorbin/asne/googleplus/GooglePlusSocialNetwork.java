@@ -23,6 +23,7 @@ package com.github.gorbin.asne.googleplus;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -441,11 +442,17 @@ public class GooglePlusSocialNetwork extends SocialNetwork implements GoogleApiC
     @Override
     public void requestPostDialog(Bundle bundle, OnPostingCompleteListener onPostingCompleteListener) {
         super.requestPostDialog(bundle, onPostingCompleteListener);
-        PlusShare.Builder plusShare =  new PlusShare.Builder(mActivity).setType("text/plain");
+        PlusShare.Builder plusShare =  new PlusShare.Builder(mActivity);
 
         if(bundle != null){
             if (bundle.containsKey(BUNDLE_PICTURE)) {
-                plusShare.setContentUrl(Uri.parse(bundle.getString(BUNDLE_PICTURE)));
+                Uri selectedImage = Uri.parse(bundle.getString(BUNDLE_PICTURE));
+                ContentResolver cr = mActivity.getContentResolver();
+                String mime = cr.getType(selectedImage);
+                plusShare.setType(mime);
+                plusShare.setStream(selectedImage);
+            } else {
+                plusShare.setType("text/plain");
             }
             if(bundle.containsKey(BUNDLE_MESSAGE)){
                 plusShare.setText(bundle.getString(BUNDLE_MESSAGE));
