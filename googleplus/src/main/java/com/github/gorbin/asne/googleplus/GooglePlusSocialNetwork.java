@@ -445,25 +445,29 @@ public class GooglePlusSocialNetwork extends SocialNetwork implements GoogleApiC
             if (bundle.containsKey(BUNDLE_PICTURE)) {
                 Uri selectedImage = Uri.parse(bundle.getString(BUNDLE_PICTURE));
                 plusShare.addStream(selectedImage);
-                if (bundle.containsKey(BUNDLE_MIME_TYPE)) {
-                    plusShare.setType(bundle.getString(BUNDLE_MIME_TYPE));
-                }
-                if(bundle.containsKey(BUNDLE_MESSAGE)){
+                if (bundle.containsKey(BUNDLE_MESSAGE)) {
                     plusShare.setText(bundle.getString(BUNDLE_MESSAGE));
                 }
+                if (bundle.containsKey(BUNDLE_MIME_TYPE)) {
+                    plusShare.setType(bundle.getString(BUNDLE_MIME_TYPE));
+                    shareIntent = plusShare.getIntent().setDataAndType(selectedImage, bundle.getString(BUNDLE_MIME_TYPE));
+                }
+
             } else {
                 plusShare.setType("text/plain");
 
                 if (bundle.containsKey(BUNDLE_LINK)) {
                     plusShare.setContentUrl(Uri.parse(bundle.getString(BUNDLE_LINK)));
                 }
+                if (bundle.containsKey(BUNDLE_MESSAGE)) {
+                    plusShare.setText(bundle.getString(BUNDLE_MESSAGE));
+                }
+            }
 
-            }
-            if (bundle.containsKey(BUNDLE_MESSAGE)) {
-                plusShare.setText(bundle.getString(BUNDLE_MESSAGE));
-            }
         }
-        shareIntent = plusShare.getIntent();
+        if (shareIntent == null) {
+            shareIntent = plusShare.getIntent();
+        }
         mActivity.startActivityForResult(shareIntent, 0);
     }
 
