@@ -450,7 +450,7 @@ public class GooglePlusSocialNetwork extends SocialNetwork implements GoogleApiC
                 }
                 if (bundle.containsKey(BUNDLE_MIME_TYPE)) {
                     plusShare.setType(bundle.getString(BUNDLE_MIME_TYPE));
-                    shareIntent = plusShare.getIntent().setDataAndType(selectedImage, bundle.getString(BUNDLE_MIME_TYPE));
+
                 }
 
             } else {
@@ -465,9 +465,7 @@ public class GooglePlusSocialNetwork extends SocialNetwork implements GoogleApiC
             }
 
         }
-        if (shareIntent == null) {
-            shareIntent = plusShare.getIntent();
-        }
+        shareIntent = plusShare.getIntent();
         mActivity.startActivityForResult(shareIntent, 0);
     }
 
