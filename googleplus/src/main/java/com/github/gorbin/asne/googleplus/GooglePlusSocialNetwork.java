@@ -30,7 +30,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.MediaStore;
+import android.support.v4.app.ShareCompat;
 
 import com.github.gorbin.asne.core.AccessToken;
 import com.github.gorbin.asne.core.SocialNetwork;
@@ -51,10 +51,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.plus.People;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.PlusShare;
@@ -442,26 +439,31 @@ public class GooglePlusSocialNetwork extends SocialNetwork implements GoogleApiC
     @Override
     public void requestPostDialog(Bundle bundle, OnPostingCompleteListener onPostingCompleteListener) {
         super.requestPostDialog(bundle, onPostingCompleteListener);
-        PlusShare.Builder plusShare =  new PlusShare.Builder(mActivity);
-
+        Intent shareIntent = null;
+        PlusShare.Builder plusShare = new PlusShare.Builder(mActivity);
         if(bundle != null){
             if (bundle.containsKey(BUNDLE_PICTURE)) {
                 Uri selectedImage = Uri.parse(bundle.getString(BUNDLE_PICTURE));
-                ContentResolver cr = mActivity.getContentResolver();
-                String mime = cr.getType(selectedImage);
-                plusShare.setType(mime);
-                plusShare.setStream(selectedImage);
+                plusShare.addStream(selectedImage);
+                if (bundle.containsKey(BUNDLE_MIME_TYPE)) {
+                    plusShare.setType(bundle.getString(BUNDLE_MIME_TYPE));
+                }
+                if(bundle.containsKey(BUNDLE_MESSAGE)){
+                    plusShare.setText(bundle.getString(BUNDLE_MESSAGE));
+                }
             } else {
                 plusShare.setType("text/plain");
+
+                if (bundle.containsKey(BUNDLE_LINK)) {
+                    plusShare.setContentUrl(Uri.parse(bundle.getString(BUNDLE_LINK)));
+                }
+
             }
-            if(bundle.containsKey(BUNDLE_MESSAGE)){
+            if (bundle.containsKey(BUNDLE_MESSAGE)) {
                 plusShare.setText(bundle.getString(BUNDLE_MESSAGE));
             }
-            if(bundle.containsKey(BUNDLE_LINK)){
-                plusShare.setContentUrl(Uri.parse(bundle.getString(BUNDLE_LINK)));
-            }
         }
-        Intent shareIntent = plusShare.getIntent();
+        shareIntent = plusShare.getIntent();
         mActivity.startActivityForResult(shareIntent, 0);
     }
 

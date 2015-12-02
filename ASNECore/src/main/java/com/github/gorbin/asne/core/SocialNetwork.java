@@ -111,6 +111,8 @@ public abstract class SocialNetwork {
     /*** Share bundle constant for picture*/
     public static final String BUNDLE_PICTURE = "picture";
 
+    public static final String BUNDLE_MIME_TYPE = "mime_type";
+
     /*** Shared preferences name */
     private static final String SHARED_PREFERENCES_NAME = "social_networks";
     protected Fragment mSocialNetworkManager;
