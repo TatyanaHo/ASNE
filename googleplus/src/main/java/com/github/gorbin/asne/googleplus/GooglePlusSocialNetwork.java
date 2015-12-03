@@ -466,7 +466,10 @@ public class GooglePlusSocialNetwork extends SocialNetwork implements GoogleApiC
 
         }
         shareIntent = plusShare.getIntent();
-        mActivity.startActivityForResult(shareIntent, 0);
+        if (bundle != null && bundle.containsKey("package")) {
+            shareIntent.setPackage(bundle.getString("package"));
+        }
+        getCurrentActivity().startActivityForResult(shareIntent, 0);
     }
 
     /**
